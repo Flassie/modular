@@ -6,6 +6,9 @@
       <sourceFolder url="file://$MODULE_DIR$/modular-dll/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/modular-native/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/example/module1/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/example/module2/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/example/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

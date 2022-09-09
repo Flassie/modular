@@ -1,6 +1,8 @@
 [workspace]
 members = [
-    "core",
     "modular-native",
-    "modular-dll"
+    "modular-dll",
+    "example",
+    "example/module1",
+    "example/module2"
 ]
