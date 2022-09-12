@@ -8,7 +8,7 @@ struct Module1 {
 
 impl Module for Module1 {
     fn package(&self) -> &str {
-        "wasm-example.module2"
+        "dll.module2"
     }
 
     fn version(&self) -> &str {
@@ -16,7 +16,7 @@ impl Module for Module1 {
     }
 
     fn run(&self) {
-        println!("Module1::run");
+        println!("dll.module2::run");
     }
 
     fn invoke(&self, _: &str, _: Option<&[u8]>, callback: Box<dyn Callback>) {
@@ -24,27 +24,23 @@ impl Module for Module1 {
 
         impl Callback for TestCallback {
             fn on_success(&self, result: CallbackSuccess) {
-                println!("module2::on_success: {:?}", result.data)
+                println!("dll.module2::on_success: {:?}", result.data)
             }
 
             fn on_error(&self, err: CallbackError) {
-                println!("module2::on_err: {:?}", err.code)
+                println!("dll.module2::on_err: {:?}", err.code)
             }
         }
 
-        self.registry.invoke(
-            "wasm-example.module3",
-            "hello!",
-            None,
-            Box::new(TestCallback {}),
-        );
+        self.registry
+            .invoke("wasm.module", "hello!", None, Box::new(TestCallback {}));
 
         callback.on_success(CallbackSuccess {
-            data: Some(b"Module1::invoke"),
+            data: Some(b"dll.module2::invoke"),
         });
 
         callback.on_success(CallbackSuccess {
-            data: Some(b"Module1::invoke"),
+            data: Some(b"dll.module2::invoke"),
         });
     }
 }

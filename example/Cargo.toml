@@ -13,3 +13,6 @@ path = "../modular"
 
 [dependencies.modular-dll]
 path = "../modular-dll"
+
+[dependencies.modular-wasm]
+path = "../modular-wasm"

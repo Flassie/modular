@@ -8,7 +8,7 @@ struct Module1 {
 
 impl Module for Module1 {
     fn package(&self) -> &str {
-        "wasm-example.module1"
+        "dll.module1"
     }
 
     fn version(&self) -> &str {
@@ -20,7 +20,7 @@ impl Module for Module1 {
 
         impl Callback for TestCallback {
             fn on_success(&self, result: CallbackSuccess) {
-                println!("module1::on_success: {:?}", result.data)
+                println!("dll.module1::on_success: {:?}", result.data)
             }
 
             fn on_error(&self, err: CallbackError) {
@@ -29,13 +29,16 @@ impl Module for Module1 {
         }
 
         self.registry
-            .invoke("wasm-example.module2", "1", None, Box::new(TestCallback {}))
+            .invoke("dll.module2", "1", None, Box::new(TestCallback {}))
     }
 
     fn invoke(&self, method: &str, data: Option<&[u8]>, callback: Box<dyn Callback>) {
-        println!("Module1::invoke: method = {}, data = {:?}", method, data);
+        println!(
+            "dll.module1::invoke: method = {}, data = {:?}",
+            method, data
+        );
         callback.on_success(CallbackSuccess {
-            data: Some(b"Module1::invoke"),
+            data: Some(b"dll.module1::invoke"),
         });
     }
 }
