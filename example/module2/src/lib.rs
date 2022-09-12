@@ -1,4 +1,4 @@
-use modular::{
+use modular_core::{
     Callback, CallbackError, CallbackSuccess, Module, NativeModule, NativeRegistry, Registry,
 };
 
@@ -8,7 +8,7 @@ struct Module1 {
 
 impl Module for Module1 {
     fn package(&self) -> &str {
-        "example.module2"
+        "wasm-example.module2"
     }
 
     fn version(&self) -> &str {
@@ -32,8 +32,12 @@ impl Module for Module1 {
             }
         }
 
-        self.registry
-            .invoke("example.module3", "hello!", None, Box::new(TestCallback {}));
+        self.registry.invoke(
+            "wasm-example.module3",
+            "hello!",
+            None,
+            Box::new(TestCallback {}),
+        );
 
         callback.on_success(CallbackSuccess {
             data: Some(b"Module1::invoke"),

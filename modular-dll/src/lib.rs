@@ -1,5 +1,7 @@
-use modular::{Callback, Module, NativeModule, NativeRegistry, Registry};
+use modular_core::{Callback, Module, NativeModule, NativeRegistry, Registry};
 use std::ffi::OsStr;
+
+pub use modular_core::*;
 
 pub struct DllModule {
     _lib: libloading::Library,

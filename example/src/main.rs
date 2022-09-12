@@ -19,8 +19,8 @@ fn main() {
 
     let _ = modular.run();
 
-    // modular.deregister_module("example.module1");
-    // modular.deregister_module("example.module2");
+    // modular.deregister_module("wasm-example.module1");
+    // modular.deregister_module("wasm-example.module2");
 
     drop(modular)
 }

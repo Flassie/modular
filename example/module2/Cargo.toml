@@ -8,8 +8,8 @@ edition = "2021"
 [dependencies]
 futures = "0.3"
 
-[dependencies.modular-native]
-path = "../../modular-native"
+[dependencies.modular-core]
+path = "../../modular-core"
 
 [lib]
 crate-type = [ "cdylib" ]

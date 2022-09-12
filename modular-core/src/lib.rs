@@ -2,12 +2,12 @@
 
 mod callback;
 mod errors;
-mod modular;
 mod module;
 mod native_byte_slice;
 mod registry;
 
 pub use callback::*;
+pub use errors::*;
 pub use module::*;
 pub use native_byte_slice::*;
 pub use registry::*;

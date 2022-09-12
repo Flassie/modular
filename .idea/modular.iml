@@ -4,11 +4,15 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/core/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/modular-dll/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/modular-native/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/example/module1/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/example/module2/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/example/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/modular-core/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/modular-wasm/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/modular-wasm/wasm-example/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/modular-wasm/wasm-module-core/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/modular/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

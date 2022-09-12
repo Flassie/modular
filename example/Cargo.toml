@@ -8,8 +8,8 @@ edition = "2021"
 [dependencies]
 libloading = "0.7"
 
-[dependencies.modular-native]
-path = "../modular-native"
+[dependencies.modular]
+path = "../modular"
 
 [dependencies.modular-dll]
 path = "../modular-dll"

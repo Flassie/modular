@@ -1,12 +1,18 @@
 [package]
-name = "modular-dll"
+name = "modular"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-libloading = "0.7"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+parking_lot = "0.12"
 
 [dependencies.modular-core]
 path = "../modular-core"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+name = "modular"

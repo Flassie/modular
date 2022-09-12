@@ -1,12 +1,14 @@
 [package]
-name = "modular-dll"
+name = "wasm-example"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-libloading = "0.7"
 
-[dependencies.modular-core]
-path = "../modular-core"
+[dependencies.wasm-module-core]
+path = "../wasm-module-core"
+
+[lib]
+crate-type = ["cdylib", "rlib"]

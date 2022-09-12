@@ -1,5 +1,5 @@
-use crate::errors::Error;
-use crate::{Callback, CallbackError, Module, NativeRegistry, Registry};
+use modular_core::Error;
+use modular_core::{Callback, CallbackError, Module, NativeRegistry, Registry};
 use parking_lot::{Mutex, RwLock};
 use std::collections::HashMap;
 use std::sync::Arc;

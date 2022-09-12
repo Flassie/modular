@@ -1,8 +1,12 @@
 [workspace]
 members = [
-    "modular-native",
+    "modular",
+    "modular-core",
     "modular-dll",
+    "modular-wasm",
+    "modular-wasm/wasm-example",
     "example",
     "example/module1",
-    "example/module2"
+    "example/module2",
+    "modular-wasm/wasm-module-core"
 ]
