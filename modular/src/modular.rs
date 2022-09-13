@@ -14,8 +14,8 @@ pub struct Modular {
     is_running: Arc<Mutex<bool>>,
 }
 
-impl Modular {
-    pub fn new() -> Self {
+impl Default for Modular {
+    fn default() -> Self {
         let _ = tracing_subscriber::fmt::SubscriberBuilder::default()
             .with_max_level(tracing::Level::DEBUG)
             .try_init();
@@ -26,6 +26,8 @@ impl Modular {
         }
     }
 }
+
+impl Modular {}
 
 impl Registry for Modular {
     fn run(&self) -> Result<(), Error> {
@@ -48,6 +50,9 @@ impl Registry for Modular {
         for module in modules {
             let jh = thread::spawn(move || {
                 module.read().run();
+
+                debug!("module {:?} run finished", module.read().package());
+
                 module
             });
 
@@ -57,7 +62,7 @@ impl Registry for Modular {
         for jh in join_handles {
             match jh.join() {
                 Ok(module) => {
-                    debug!("module {:?} thread finished", module.read().package());
+                    debug!("module {:?} thread joined", module.read().package());
                 }
                 Err(_) => {
                     error!("error joining thread")
@@ -111,5 +116,5 @@ impl Registry for Modular {
 
 #[no_mangle]
 pub extern "C" fn create_modular() -> NativeRegistry {
-    NativeRegistry::new(Modular::new())
+    NativeRegistry::new(Modular::default())
 }

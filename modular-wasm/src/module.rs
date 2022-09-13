@@ -3,7 +3,9 @@ use crate::state::WasmModuleState;
 use crate::utils::{get_uid, read_bytes, read_string};
 use crate::vtable::WasmModuleVTable;
 use modular_core::*;
-use parking_lot::RwLock;
+use parking_lot::lock_api::MutexGuard;
+use parking_lot::{Mutex, RawMutex, RwLock};
+use std::time::Duration;
 use tracing::error;
 use uuid::Uuid;
 use wasmer::*;
@@ -11,7 +13,7 @@ use wasmer_wasi::WasiState;
 
 pub struct WasmModule {
     _instance: Instance,
-    store: RwLock<Store>,
+    store: Mutex<Store>,
     memory: Memory,
 
     instance_ptr: i32,
@@ -55,7 +57,7 @@ impl WasmModule {
         let version = vtable.version(instance_ptr, &mut store, &memory)?;
 
         Ok(Self {
-            store: RwLock::new(store),
+            store: Mutex::new(store),
             _instance: instance,
             vtable,
             instance_ptr,
@@ -67,7 +69,7 @@ impl WasmModule {
     }
 
     pub fn invoke(&self, action: &str, data: Option<&[u8]>, callback: Box<dyn Callback>) {
-        let mut store = self.store.write();
+        let mut store = self.store.lock();
 
         macro_rules! call {
             ($expr:expr, $code:literal, $err_name:literal, $callback:ident) => {
@@ -219,7 +221,7 @@ impl Drop for WasmModule {
     fn drop(&mut self) {
         if let Err(err) = self
             .vtable
-            .destroy(self.instance_ptr, &mut *self.store.write())
+            .destroy(self.instance_ptr, &mut *self.store.lock())
         {
             error!("Failed to destroy wasm module: {}", err);
         }
