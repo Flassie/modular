@@ -19,3 +19,6 @@ path = "../modular-wasm"
 
 [dependencies.modular-tracing-core]
 path = "../modular-tracing/modular-tracing-core"
+
+[dependencies.native-recorder]
+path = "../modular-tracing/native-recorder"

@@ -1,6 +1,6 @@
 pub use crate::interest::Interest;
 use crate::layer::ProtobufLayer;
-pub use crate::recorder::Recorder;
+pub use crate::recorder::*;
 
 mod interest;
 pub mod layer;

@@ -129,7 +129,6 @@ impl Registry for NativeRegistry {
 
 impl Drop for NativeRegistry {
     fn drop(&mut self) {
-        error!("dropping native registry");
         (self.drop)(self.instance)
     }
 }

@@ -1,7 +1,7 @@
 use modular_core::{
     Callback, CallbackError, CallbackSuccess, Module, NativeModule, NativeRegistry, Registry,
 };
-use native_recorder::{register_module_tracer, NativeRecorder};
+use native_recorder::{register_module_tracer, NativeBytesRecorder};
 use tracing::{error, info, instrument};
 
 struct Module1 {
@@ -76,7 +76,7 @@ impl Module for Module1 {
 #[no_mangle]
 pub extern "C" fn create_module(
     registry: NativeRegistry,
-    recorder: NativeRecorder,
+    recorder: NativeBytesRecorder,
 ) -> NativeModule {
     register_module_tracer(Box::leak(Box::new(recorder)));
 

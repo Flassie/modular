@@ -2,7 +2,7 @@ use modular_core::{Callback, Module, NativeModule, NativeRegistry, Registry};
 use std::ffi::OsStr;
 
 pub use modular_core::*;
-use native_recorder::{NativeRecorder, Recorder};
+use native_recorder::{BytesRecorder, NativeBytesRecorder};
 
 pub struct DllModule {
     _lib: libloading::Library,
@@ -10,22 +10,22 @@ pub struct DllModule {
 }
 
 impl DllModule {
-    pub fn new<S: AsRef<OsStr>, R: Registry + 'static, L: Recorder>(
+    pub fn new<S: AsRef<OsStr>, R: Registry + 'static, L: BytesRecorder + 'static>(
         path: S,
         registry: &R,
-        recorder: &'static L,
+        recorder: L,
     ) -> Result<Self, libloading::Error> {
         unsafe {
             let lib = libloading::Library::new(path)?;
 
             let create_module = lib
-                .get::<unsafe extern "C" fn(NativeRegistry, NativeRecorder) -> NativeModule>(
+                .get::<unsafe extern "C" fn(NativeRegistry, NativeBytesRecorder) -> NativeModule>(
                     b"create_module",
                 )?;
 
             let module = create_module(
                 NativeRegistry::new(registry.clone()),
-                NativeRecorder::new(recorder),
+                NativeBytesRecorder::new(recorder),
             );
 
             Ok(Self { _lib: lib, module })

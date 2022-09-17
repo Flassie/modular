@@ -1,12 +1,15 @@
 use modular::{Modular, NativeRegistry, Registry};
 use modular_dll::DllModule;
-use modular_tracing_core::register_module_tracer;
+use modular_tracing_core::{register_module_tracer, LazyBytesRecorder, LazyRecorder};
 use modular_wasm::WasmModule;
 
 fn main() {
     let recorder = modular_tracing_core::DefaultRecorder::new();
     let recorder = Box::leak(Box::new(recorder));
+    let (runner, receiver) = LazyRecorder::new(recorder);
     register_module_tracer(recorder);
+
+    runner.run();
 
     let modular = Modular::default();
 
@@ -19,8 +22,10 @@ fn main() {
     //     (create_modular(), lib)
     // };
 
-    let module1 = DllModule::new("target/debug/libmodule1.dylib", &modular, recorder).unwrap();
-    let module2 = DllModule::new("target/debug/libmodule2.dylib", &modular, recorder).unwrap();
+    let module1 =
+        DllModule::new("target/debug/libmodule1.dylib", &modular, receiver.clone()).unwrap();
+    let module2 =
+        DllModule::new("target/debug/libmodule2.dylib", &modular, receiver.clone()).unwrap();
     // let module3 = WasmModule::new(
     //     include_bytes!("../../target/wasm32-wasi/debug/wasm_example.wasm"),
     //     modular.clone(),
