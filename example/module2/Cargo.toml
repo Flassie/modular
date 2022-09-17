@@ -7,9 +7,13 @@ edition = "2021"
 
 [dependencies]
 futures = "0.3"
+tracing = "0.1"
 
 [dependencies.modular-core]
 path = "../../modular-core"
+
+[dependencies.native-recorder]
+path = "../../modular-tracing/native-recorder"
 
 [lib]
 crate-type = [ "cdylib" ]

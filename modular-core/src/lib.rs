@@ -30,6 +30,3 @@ macro_rules! get_str {
         }
     };
 }
-
-#[test]
-fn a() {}

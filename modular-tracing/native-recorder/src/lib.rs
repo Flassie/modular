@@ -1,9 +1,13 @@
 use protobuf_tracing::types::Record;
-use protobuf_tracing::{Interest, Message, Recorder};
+use protobuf_tracing::{Interest, Message};
 use std::mem::ManuallyDrop;
 use std::ptr::null;
 
+pub use protobuf_tracing::register_module_tracer;
+pub use protobuf_tracing::Recorder;
+
 #[derive(Copy, Clone)]
+#[repr(C)]
 pub struct NativeRecorder {
     obj: *const (),
     is_interested: extern "C" fn(
@@ -21,7 +25,7 @@ unsafe impl Send for NativeRecorder {}
 unsafe impl Sync for NativeRecorder {}
 
 impl NativeRecorder {
-    pub fn new<R: Recorder + 'static>(recorder: &R) -> Self {
+    pub fn new<R: Recorder>(recorder: &'static R) -> Self {
         Self {
             obj: recorder as *const R as *const (),
             is_interested: Self::ffi_is_interested::<R>,
@@ -76,7 +80,7 @@ impl NativeRecorder {
 impl Recorder for NativeRecorder {
     fn is_interested(&self, interest: &Interest) -> bool {
         (self.is_interested)(
-            self.obj,
+            self.obj as *const _ as *const (),
             interest.target.as_ptr(),
             interest.target.len(),
             interest
@@ -92,7 +96,7 @@ impl Recorder for NativeRecorder {
 
     fn record(&self, record: &Record) {
         let len = record.encoded_len();
-        let ptr = (self.alloc_protobuf_record)(self.obj, len);
+        let ptr = (self.alloc_protobuf_record)(self.obj as *const _ as *const (), len);
 
         if ptr.is_null() {
             eprintln!("ptr for record is null");
@@ -102,9 +106,6 @@ impl Recorder for NativeRecorder {
         let mut buf = unsafe { std::slice::from_raw_parts_mut(ptr, len) };
         record.encode(&mut buf).unwrap();
 
-        (self.on_protobuf_record)(self.obj, ptr, len);
+        (self.on_protobuf_record)(self.obj as *const _ as *const (), ptr, len);
     }
 }
-
-#[test]
-fn a() {}

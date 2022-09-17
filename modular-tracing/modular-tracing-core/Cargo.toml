@@ -6,6 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+atty = "0.2"
+ansi_term = "0.12"
 
 [dependencies.protobuf-tracing]
 path = "../protobuf-tracing"

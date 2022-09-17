@@ -1,5 +1,6 @@
 use prost::*;
 use std::collections::HashMap;
+use std::fmt::{Debug, Display, Formatter};
 
 #[derive(Message)]
 pub struct Record {
@@ -47,21 +48,24 @@ pub struct Span {
 
     #[prost(uint32, tag = "5", optional)]
     pub line: Option<u32>,
+
+    #[prost(hash_map = "string, message", tag = "6")]
+    pub fields: HashMap<String, Values>,
 }
 
-#[derive(Message, PartialEq)]
+#[derive(Message, PartialEq, Clone)]
 pub struct Values {
     #[prost(message, repeated, tag = "1")]
     pub values: Vec<Value>,
 }
 
-#[derive(Message, PartialEq)]
+#[derive(Message, PartialEq, Clone)]
 pub struct Value {
     #[prost(oneof = "ValueType", tags = "1, 2, 3, 4, 5, 6, 7, 8")]
     pub value: Option<ValueType>,
 }
 
-#[derive(Oneof, PartialEq)]
+#[derive(Oneof, PartialEq, Clone)]
 pub enum ValueType {
     #[prost(double, tag = "1")]
     F64(f64),
@@ -79,4 +83,19 @@ pub enum ValueType {
     String(String),
     #[prost(string, tag = "8")]
     Error(String),
+}
+
+impl Display for ValueType {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ValueType::F64(v) => write!(f, "{}", v),
+            ValueType::I64(v) => write!(f, "{}", v),
+            ValueType::U64(v) => write!(f, "{}", v),
+            ValueType::U128(v) => write!(f, "{:02X?}", v),
+            ValueType::I128(v) => write!(f, "{:02X?}", v),
+            ValueType::Bool(v) => write!(f, "{}", v),
+            ValueType::String(v) => write!(f, "{}", v),
+            ValueType::Error(v) => write!(f, "{}", v),
+        }
+    }
 }

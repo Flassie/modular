@@ -12,11 +12,11 @@ pub use prost::*;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::registry;
 
-pub fn layer<R: Recorder + 'static>(r: R) -> ProtobufLayer {
+pub fn layer<R: Recorder>(r: &'static R) -> ProtobufLayer {
     ProtobufLayer::new(r)
 }
 
-pub fn register_module_tracer<R: Recorder + 'static>(recorder: R) {
+pub fn register_module_tracer<R: Recorder>(recorder: &'static R) {
     let registry = registry().with(layer(recorder));
     let _ = tracing::subscriber::set_global_default(registry);
 }

@@ -1,36 +1,67 @@
 use modular_core::{
     Callback, CallbackError, CallbackSuccess, Module, NativeModule, NativeRegistry, Registry,
 };
+use native_recorder::{register_module_tracer, NativeRecorder};
+use tracing::{error, info, instrument};
 
-struct Module1 {
+struct Module2 {
     registry: NativeRegistry,
 }
 
-impl Module for Module1 {
+impl Module2 {
+    #[instrument(skip(registry))]
+    pub fn new(registry: NativeRegistry) -> Self {
+        info!("hello from module2");
+        Self { registry }
+    }
+}
+
+impl Module for Module2 {
+    #[instrument(skip(self))]
     fn package(&self) -> &str {
         "dll.module2"
     }
 
+    #[instrument(skip(self))]
     fn version(&self) -> &str {
         "0.0.1"
     }
 
+    #[instrument(skip(self))]
     fn run(&self) {
-        println!("dll.module2::run");
+        info!("dll.module2::run");
     }
 
-    fn invoke(&self, _: &str, _: Option<&[u8]>, callback: Box<dyn Callback>) {
+    #[instrument(skip(self, callback))]
+    fn invoke(&self, method: &str, data: Option<&[u8]>, callback: Box<dyn Callback>) {
         struct TestCallback {}
 
         impl Callback for TestCallback {
+            #[instrument(
+                skip(self, result),
+                fields(
+                    data = ?result.data,
+                    data_len = result.data.map(|i| i.len()).unwrap_or_default()
+                )
+            )]
             fn on_success(&self, result: CallbackSuccess) {
-                println!("dll.module2::on_success: {:?}", result.data)
+                info!("dll.module2::on_success: {:?}", result.data)
             }
 
+            #[instrument(
+                skip(self, err),
+                fields(
+                    code = %err.code,
+                    err_name = %err.err_name.unwrap_or_default(),
+                    description = %err.description.unwrap_or_default()
+                )
+            )]
             fn on_error(&self, err: CallbackError) {
-                println!("dll.module2::on_err: {:?}", err.code)
+                error!("dll.module2::on_err: {:?}", err.code)
             }
         }
+
+        info!(a = "hello", a = "world", "test with fields");
 
         self.registry
             .invoke("wasm.module", "hello!", None, Box::new(TestCallback {}));
@@ -45,7 +76,13 @@ impl Module for Module1 {
     }
 }
 
+#[instrument(skip(registry, recorder))]
 #[no_mangle]
-pub extern "C" fn create_module(registry: NativeRegistry) -> NativeModule {
-    NativeModule::new(Module1 { registry })
+pub extern "C" fn create_module(
+    registry: NativeRegistry,
+    recorder: NativeRecorder,
+) -> NativeModule {
+    register_module_tracer(Box::leak(Box::new(recorder)));
+
+    NativeModule::new(Module2::new(registry))
 }

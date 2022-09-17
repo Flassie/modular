@@ -9,13 +9,11 @@ use tracing_subscriber::layer::Context;
 use tracing_subscriber::registry::LookupSpan;
 
 pub struct ProtobufLayer {
-    handler: Box<dyn Recorder>,
+    handler: &'static dyn Recorder,
 }
 impl ProtobufLayer {
-    pub fn new<R: Recorder + 'static>(r: R) -> Self {
-        Self {
-            handler: Box::new(r),
-        }
+    pub fn new<R: Recorder>(r: &'static R) -> Self {
+        Self { handler: r }
     }
 }
 
@@ -61,6 +59,11 @@ where
                 level: span.metadata().level().to_string(),
                 file: span.metadata().file().map(|s| s.to_string()),
                 line: span.metadata().line(),
+                fields: span
+                    .extensions()
+                    .get::<SpanFields>()
+                    .map(|i| i.fields.clone())
+                    .unwrap_or_default(),
             };
 
             spans.push(s)
