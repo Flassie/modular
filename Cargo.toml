@@ -10,5 +10,6 @@ members = [
     "example/module2",
     "modular-wasm/wasm-module-core",
     "modular-tracing/protobuf-tracing",
+    "modular-tracing/native-recorder",
     "modular-tracing/modular-tracing-core"
 ]
