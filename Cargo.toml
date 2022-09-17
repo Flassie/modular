@@ -8,5 +8,7 @@ members = [
     "example",
     "example/module1",
     "example/module2",
-    "modular-wasm/wasm-module-core"
+    "modular-wasm/wasm-module-core",
+    "modular-tracing/protobuf-tracing",
+    "modular-tracing/modular-tracing-core"
 ]

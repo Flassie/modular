@@ -13,6 +13,9 @@
       <sourceFolder url="file://$MODULE_DIR$/modular-wasm/wasm-example/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/modular-wasm/wasm-module-core/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/modular/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/modular-tracing/modular-tracing-core/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/modular-tracing/module-recorder/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/modular-tracing/protobuf-tracing/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
